@@ -1,24 +1,32 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound
-
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 
 # Create your views here.
-
-#def january(request):
-#    return HttpResponse("This is January")
-
-
-#def february(request):
-#    return HttpResponse("This is February")
+monthly_challenges = {
+    "january": "This is the January challenge",
+    "february": "This is the February challenge",
+    "march": "This is the March challenge",
+    "april": "This is the April challenge",
+    "may": "This is the May challenge",
+    "june": "This is the June challenge",
+    "july": "This is the July challenge",
+    "august": "This is the August challenge",
+    "september": "This is the September challenge",
+    "october": "This is the October challenge",
+    "november": "This is the November challenge",
+    "december": "This is the December challenge"
+}
 
 
 def monthly_challenge_by_number(request, month):
-    return HttpResponse(month)
+    months = list(monthly_challenges.keys())
+    redirect_month = months[month]
+    return HttpResponseRedirect("/challenges/" + redirect_month)
 
 
 def monthly_challenge(request, month):
-    if month == "january":
-        challenge_text: str = "This is the January challenge"
-    else:
-        return HttpResponseNotFound("This is not the month you are looking for")
-    return HttpResponse(challenge_text)
+    try:
+        challenge_text = monthly_challenges[month]
+        return HttpResponse(challenge_text)
+    except:
+        return HttpResponseNotFound("Month not found")
